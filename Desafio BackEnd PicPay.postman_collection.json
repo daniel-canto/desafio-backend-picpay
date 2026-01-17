@@ -1,0 +1,92 @@
+{
+  "info": {
+    "_postman_id": "9f1ae000-c0b9-475c-8606-a87e8b837003",
+    "name": "Desafio BackEnd PicPay",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "31592237"
+  },
+  "item": [
+    {
+      "name": "Create User",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"firstName\": \"Daniel\",\n    \"lastName\": \"Canto\",\n    \"document\": \"1234567891\",\n    \"email\": \"daniel@teste.com\",\n    \"userType\": \"COMMON\",\n    \"balance\": 100,\n    \"password\": \"senha123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/users",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All users",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"firstName\": \"José\",\n    \"lastName\": \"Augusto\",\n    \"document\": \"1234567892\",\n    \"email\": \"josea@teste.com\",\n    \"userType\": \"COMMON\",\n    \"balance\": 100\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/users",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Transaction",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"senderId\": 3,\n    \"receiverId\": 1,\n    \"value\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/transaction",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "transaction"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
