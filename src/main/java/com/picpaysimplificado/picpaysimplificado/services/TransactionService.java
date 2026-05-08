@@ -5,15 +5,9 @@ import com.picpaysimplificado.picpaysimplificado.domain.user.User;
 import com.picpaysimplificado.picpaysimplificado.dtos.TransactionDTO;
 import com.picpaysimplificado.picpaysimplificado.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @Service
 public class TransactionService {
@@ -21,10 +15,12 @@ public class TransactionService {
     private UserService userService;
     @Autowired
     private TransactionRepository repository;
-    @Autowired
-    private RestTemplate restTemplate;
+//    @Autowired
+//    private RestTemplate restTemplate;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private AuthorizationService authorizationService;
 
     public Transaction createTransaction(TransactionDTO transaction) throws Exception {
         User sender = this.userService.findUserById(transaction.senderId());
@@ -32,7 +28,7 @@ public class TransactionService {
 
         userService.validateTransaction(sender, transaction.value());
 
-        boolean isAuthorized = this.authorizeTransaction(sender, transaction.value());
+        boolean isAuthorized = this.authorizationService.authorizeTransaction(sender, transaction.value());
         if (!isAuthorized) {
             throw new Exception("Transacao não autorizada");
         }
@@ -59,21 +55,21 @@ public class TransactionService {
         return newTransaction;
     }
 
-    public boolean authorizeTransaction(User sender, BigDecimal value) {
-        try {
-            ResponseEntity<Map> response = restTemplate.getForEntity("https://util.devi.tools/api/v2/authorize", Map.class);
-
-            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-                Map<String, Object> data = (Map<String, Object>) response.getBody().get("data");
-                return (boolean) data.get("authorization");
-            }
-        } catch (HttpClientErrorException.Forbidden e) {
-            // A API retornou 403, ou seja, não autorizado
-            return false;
-        } catch (Exception e) {
-            // Outros erros
-            return false;
-        }
-        return false;
-    }
+//    public boolean authorizeTransaction(User sender, BigDecimal value) {
+//        try {
+//            ResponseEntity<Map> response = restTemplate.getForEntity("https://util.devi.tools/api/v2/authorize", Map.class);
+//
+//            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+//                Map<String, Object> data = (Map<String, Object>) response.getBody().get("data");
+//                return (boolean) data.get("authorization");
+//            }
+//        } catch (HttpClientErrorException.Forbidden e) {
+//            // A API retornou 403, ou seja, não autorizado
+//            return false;
+//        } catch (Exception e) {
+//            // Outros erros
+//            return false;
+//        }
+//        return false;
+//    }
 }
